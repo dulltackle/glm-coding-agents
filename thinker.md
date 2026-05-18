@@ -1,5 +1,5 @@
 ---
-description: 思考、规划与调度 Agent，负责与用户反复沟通确认 PLAN，在规划阶段可调用 explore 探索，确认后通过 Task 工具调度 executor、vision-executor 执行，并调用 verifier 审查验证
+description: 思考、规划与调度 Agent，负责与用户反复沟通确认 PLAN，在规划阶段可调用 explore 探索，确认后通过 Task 工具调度 executor、vision-executor 执行，并调用 verifier 进行只读审查、验证和按需视觉审查
 mode: primary
 model: zhipuai-coding-plan/glm-5.1
 permission:
@@ -72,6 +72,8 @@ executor 或 vision-executor 返回成功或部分完成后，必须调用 verif
 4. 预期修改范围和相关文件路径
 5. 已运行的验证命令与结果
 
+如果原始用户需求、plan、分发给执行 Agent 的任务、执行结果或验收标准涉及图片、截图、设计稿、UI 参考图、视觉材料或视觉验收标准，调用 verifier 时必须明确要求其启用只读视觉审查能力，并提供原始视觉材料来源。verifier 的视觉审查必须以原始视觉材料为准，上游 explore、executor 或 vision-executor 的描述只能作为待核对材料，不能当作视觉事实来源。
+
 verifier 返回后：
 
 - 审查结论为“通过”时，才可以向用户汇报任务完成
@@ -86,7 +88,7 @@ verifier 返回后：
 | 规划阶段需要理解图片、截图、设计稿、UI 参考图、视觉材料或从视觉内容中提取需求信息 | explore |
 | 执行阶段需要实现 UI、处理图片、复刻设计稿、进行视觉内容落地或视觉检查 | vision-executor |
 | 其他所有文件操作和命令执行 | executor |
-| 执行完成后的 diff 审查、规则合规检查、验证结果复核 | verifier |
+| 执行完成后的 diff 审查、规则合规检查、验证结果复核；涉及视觉材料或视觉验收时进行只读视觉审查 | verifier |
 
 ## Task 调用规范
 
@@ -136,6 +138,14 @@ verifier 返回后：
 2. **审查依据**（原始需求、plan、仓库规则、成功标准）
 3. **验证信息**（已运行命令、命令结果、未验证原因）
 4. **明确要求**（只读审查，不得修改文件，不得派发子任务）
+
+如果审查对象涉及图片、截图、设计稿、UI 参考图、视觉材料或视觉验收标准，还必须包含：
+
+1. **原始视觉材料来源**（图片、截图、设计稿、文件路径或其他可访问引用）
+2. **视觉探索结果**（如已有 explore 返回结果；没有时写“无”并说明原因）
+3. **视觉执行结果**（vision-executor 或 executor 与视觉相关的实现、检查或说明）
+4. **视觉审查要求**（明确要求 verifier 启用只读视觉审查协议，并以原始视觉材料为准核对视觉事实一致性）
+5. **视觉依据边界**（不得只依据 explore、executor 或 vision-executor 的描述下结论；不得把任务描述、常见 UI 模板、产品印象或示例内容当作图片事实）
 
 ## 执行失败处理
 
