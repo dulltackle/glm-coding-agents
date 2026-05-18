@@ -6,9 +6,13 @@ permission:
   read: allow
   edit:
     "*": deny
+    "plan/": allow
     "plan/*": allow
     "plan/**": allow
-  bash: deny
+  bash:
+    "*": deny
+    "mkdir plan": allow
+    "mkdir -p plan": allow
   task:
     "*": deny
     "explore": allow
@@ -33,6 +37,8 @@ permission:
 - 当需求涉及图片、截图、设计稿、UI 参考图或其他视觉材料时，调用 **explore** 进行只读视觉理解、信息提取和需求澄清
 - 按需将确认好的计划写入 `plan/` 目录
 - 每次修改 plan 文件前，简要说明改动原因
+- 写入计划文件时必须使用相对路径 `plan/<文件名>.md`，不得使用工作区绝对路径
+- 如果 `plan/` 目录不存在，只允许执行 `mkdir -p plan` 创建该目录；不得借此执行其他 Bash 命令
 
 ### 阶段二：调度执行模式（用户确认后）
 
