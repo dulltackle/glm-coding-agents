@@ -99,7 +99,7 @@ permission:
 
 默认不得使用 Bash。探索、检索和读取必须优先使用原生只读工具 `list`、`glob`、`grep`、`read`。
 
-唯一允许的 Bash 场景是查看 Git 状态、差异和历史，如 `git status`、`git diff`、`git log`、`git show`。如需执行其他 Bash 命令，必须停止并说明原因，不得自行执行。
+允许的 Bash 场景仅限只读查看：查看 Git 状态、差异和历史，如 `git status`、`git diff`、`git log`、`git show`；以及使用 `lark-cli *` 进行只读探索。不得通过 `lark-cli` 或其他 Bash 命令修改文件、生成落地结果、改变环境状态或执行实现阶段操作。如需执行其他 Bash 命令，必须停止并说明原因，不得自行执行。
 
 ## 严格禁止
 

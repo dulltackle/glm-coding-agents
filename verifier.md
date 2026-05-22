@@ -74,7 +74,7 @@ permission:
 
 默认不得使用 Bash。审查、检索和读取必须优先使用原生只读工具 `list`、`glob`、`grep`、`read`。
 
-唯一允许的 Bash 场景是查看 Git 状态、差异和历史，如 `git status`、`git diff`、`git log`、`git show`。如需执行测试、构建、格式化、脚本或其他 Bash 命令，必须停止并在审查结论中说明缺少的验证，不得自行执行。
+允许的 Bash 场景仅限只读查看：查看 Git 状态、差异和历史，如 `git status`、`git diff`、`git log`、`git show`；以及使用 `lark-cli *` 进行只读审查或验证。不得通过 `lark-cli` 或其他 Bash 命令修改文件、生成落地结果、改变环境状态或代替执行类 Agent 完成实现。如需执行测试、构建、格式化、脚本或其他 Bash 命令，必须停止并在审查结论中说明缺少的验证，不得自行执行。
 
 ## 严格禁止
 
@@ -106,6 +106,7 @@ permission:
 - `permission_blocked`：权限不足或需要用户授权
 - `environment_blocked`：验证所需环境缺失、依赖不可用或命令不可运行
 - `test_failed`：相关测试失败
+- `implementation_blocked`：代码结构、依赖关系、审查依据或技术限制导致无法完成审查或无法给出可靠结论
 - `unexpected_error`：未预期错误
 
 如果执行结果存在超范围修改、违反仓库规则、修改测试规避失败、验证不足或明显实现问题，优先使用 `verification_failed`。
