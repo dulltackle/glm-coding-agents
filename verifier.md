@@ -19,6 +19,7 @@ permission:
     "git log *": allow
     "git show": allow
     "git show *": allow
+    "lark-cli *": allow
   task:
     "*": deny
 ---
