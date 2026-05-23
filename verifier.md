@@ -20,6 +20,7 @@ permission:
     "git show": allow
     "git show *": allow
     "lark-cli *": allow
+    "officecli *": allow
   task:
     "*": deny
 ---
